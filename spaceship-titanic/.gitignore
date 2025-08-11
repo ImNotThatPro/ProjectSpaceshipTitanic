@@ -1,0 +1,6 @@
+*
+!*.py
+!spaceship-titanic/
+!spaceship-titanic/**
+!README.md
+!.gitignore
