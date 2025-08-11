@@ -1,9 +1,0 @@
-Order ID,Product,Category,Quantity Ordered,Price Each,Order Date,Purchase Address
-1.0,Laptop,Electronics,1.0,800,2024-05-12,"123 Elm St, New York"
-2.0,Mouse,Electronics,2.0,20,2024-06-19,"456 Oak St, Chicago"
-3.0,Keyboard,Electronics,1.0,50,2024-06-19,"789 Pine St, San Francisco"
-4.0,Monitor,Electronics,3.0,300,2024-07-01,"101 Maple St, New York"
-5.0,Headphones,Accessories,1.0,100,2024-08-15,"202 Birch St, Chicago"
-,Laptop,Electronics,1.0,800,2024-05-12,"123 Elm St, New York"
-7.0,Mouse,Electronics,,20,2024-07-01,"456 Oak St, Chicago"
-8.0,Keyboard,Electronics,2.0,50,2024-08-15,"789 Pine St, San Francisco"
