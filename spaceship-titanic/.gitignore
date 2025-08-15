@@ -1,5 +1,15 @@
+# Ignore everything by default
 *
+
+# Ignore IDE/project config
+.idea/
+*.iml
+.vscode/
+
+# Un-ignore Python files
 !*.py
+
+# Un-ignore project folder and specific files
 !spaceship-titanic/
 !spaceship-titanic/**
 !README.md
