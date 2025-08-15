@@ -4,3 +4,6 @@
 !spaceship-titanic/**
 !README.md
 !.gitignore
+!train.csv
+!test.csv
+!sample_submission.csv

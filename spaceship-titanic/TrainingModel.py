@@ -1,11 +1,9 @@
 import pandas as pd
-import random
 import numpy as np
-from PIL.PcfFontFile import BYTES_PER_ROW
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import minmax_scale, MinMaxScaler
+from sklearn.preprocessing import  MinMaxScaler, LabelEncoder
 
 df_test = pd.read_csv('test.csv')
 df_train = pd.read_csv('train.csv')
@@ -13,31 +11,42 @@ df_train = pd.read_csv('train.csv')
 #cleaning df_train
 #
 #
-#Dropping useless columns
-df_train = df_train.drop(columns = ['Destination', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck','Name'])
-#Split ['Cabin'] column into three readable values columns(this is gonna help the model calculate more precise?)
-df_train[['Deck', 'CabinNum', 'Side']] = df_train['Cabin'].str.split('/', expand = True)
-df_train = df_train.drop(columns = ['Cabin'])
+#Cleaning function for both of the two dataframe
+def clean_data(df):
+    df = df.drop(columns = ['Destination', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck','Name'] )
+    df[['Deck', 'CabinNum', 'Side']] = df['Cabin'].str.split('/', expand = True)
+    df = df.drop(columns= ['Cabin'])
+    df['HomePlanet'] = df['HomePlanet'].fillna('Earth')
+    df['CryoSleep'] = df['CryoSleep'].fillna('False')
+    mean_age = df['Age'].mean()
+    df['Age'] = df['Age'].fillna(mean_age)
+    df['VIP'] = df['VIP'].fillna(False)
+    np.random.seed(42)
+    df['Side'] = df['Side'].apply(
+        lambda value: np.random.choice(['S','P']) if pd.isna(value) else value
+    )
+    df['Deck'] = df['Deck'].apply(
+        lambda value: np.random.choice(['B','C','D','E','F','G']) if pd.isna(value) else value
+    )
+    df['CabinNum'] = df['CabinNum'].fillna(0)
+    return df
 
-df_train['HomePlanet'] = df_train['HomePlanet'].fillna('Earth')
-df_train['CryoSleep'] = df_train['CryoSleep'].fillna('False')
-#Using mean method to calculate the average age of the age column then fill the NaN value inside the Age column
-mean_age = df_train['Age'].mean()
-df_train['Age'] = df_train['Age'].fillna(mean_age)
-df_train['VIP'] = df_train['VIP'].fillna('False')
-#Some how this work and i don't understand how did this work
-df_train['Side'] = df_train['Side'].apply(
-    lambda value: np.random.choice(['S', 'P']) if pd.isna(value) else value
-)
-df_train['Deck'] = df_train['Deck'].apply(
-    lambda value: np.random.choice(['B','C','D','E','F','G']) if pd.isna(value) else value
-)
-df_train['CabinNum'] = df_train['CabinNum'].fillna(0)
+df_train = clean_data(df_train)
+df_test = clean_data(df_test)
 print(df_train.isnull().sum())
-print(df_train.sample)
+print(df_train.info())
+print(df_test.isnull().sum())
+print(df_test.info())
+
 #Training model
 #
 #
+#Encoding non-numeric columns from data set
+encoder = LabelEncoder()
+for col in ['HomePlanet', 'CryoSleep', 'VIP','Deck','Side']:
+    df_train[col] = encoder.transform(df_train[col])
+print(df_train.info())
+
 #Splitting data into two
 X = df_train.drop(columns=['Transported'])
 y = df_train['Transported']
